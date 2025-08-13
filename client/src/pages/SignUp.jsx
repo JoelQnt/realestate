@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link,useNavigate } from "react-router-dom";
 import Oauth from "../components/Oauth";
+import { serverUrl } from "../contants";
 
 
 export default function SignUp() {
@@ -18,7 +19,7 @@ export default function SignUp() {
     e.preventDefault();
     try {
       setLoading(true);
-      const res = await fetch("/api/auth/signup", {
+      const res = await fetch(`${serverUrl}/api/auth/signup`, {
         method: "POST",
         headers: {
           "content-type": "application/json",

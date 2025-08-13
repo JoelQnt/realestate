@@ -2,6 +2,7 @@ import { useState } from "react";
 import { app } from "../firebase";
 import { useSelector } from "react-redux";
 
+
 import {
   getDownloadURL,
   getStorage,
@@ -9,6 +10,7 @@ import {
   uploadBytesResumable,
 } from "firebase/storage";
 import { useNavigate } from "react-router-dom";
+import { serverUrl } from "../contants";
 
 export default function CreateListing() {
   const navigate = useNavigate();
@@ -128,7 +130,7 @@ export default function CreateListing() {
         return setError("you must upload atleast one image");
       if (formData.regularPrice < formData.discountPrice)
         return setError("Discount price must be lower than regular price");
-      const res = await fetch("/api/listing/create", {
+      const res = await fetch(`${serverUrl}/api/listing/create`, {
         method: "POST",
         headers: {
           "content-Type": "application/json",

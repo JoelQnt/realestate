@@ -18,6 +18,8 @@ import {
   updateUserStart,
   updateUserSucces,
 } from "../redux/userSlice";
+import { serverUrl } from "../contants";
+
 
 export default function Profile() {
   const fileRef = useRef(null);
@@ -70,7 +72,7 @@ export default function Profile() {
 
     try {
       dispatch(updateUserStart());
-      const res = await fetch(`api/user/update/${currentUser._id}1`, {
+      const res = await fetch(`${serverUrl}/api/user/update/${currentUser._id}1`, {
         method: "POST",
         headers: {
           "content-Type": "application/json",
@@ -91,9 +93,12 @@ export default function Profile() {
   const handleDeleteUser = async () => {
     try {
       dispatch(deleteUserStart());
-      const res = await fetch(`/api/user/delete/${currentUser._id}`, {
-        method: "DELETE",
-      });
+      const res = await fetch(
+        `${serverUrl}/api/user/delete/${currentUser._id}`,
+        {
+          method: "DELETE",
+        }
+      );
       const data = await res.json();
       if (data.success === false) {
         dispatch(deleteUserFailure(data.message));
@@ -108,7 +113,7 @@ export default function Profile() {
   const handleSignOut = async () => {
     try {
       dispatch(signOutUserStart());
-      const res = await fetch("/api/auth/signout");
+      const res = await fetch(`${serverUrl}/api/auth/signout`);
       const data = await res.json();
       if (data.success === false) {
         dispatch(deleteUserFailure(data.message));
@@ -123,7 +128,9 @@ export default function Profile() {
   const handleShowListings = async () => {
     try {
       setShowListingsError(false);
-      const res = await fetch(`/api/user/listings/${currentUser._id}`);
+      const res = await fetch(
+        `${serverUrl}/api/user/listings/${currentUser._id}`
+      );
       const data = await res.json();
       if (data.success === false) {
         setShowListingsError(true);
@@ -138,7 +145,7 @@ export default function Profile() {
 
   const handleListingDelete = async (listingId) => {
     try {
-      const res = await fetch(`/api/listing/delete/${listingId}`, {
+      const res = await fetch(`${serverUrl}/api/listing/delete/${listingId}`, {
         method: "DELETE",
       });
       const data = await res.json();
