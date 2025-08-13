@@ -1,9 +1,8 @@
 import Listing from "../models/listingModel.js";
-import User from "../models/usermodel.js";
+import User from "../models/userModel.js";
 
 import { errorHandler } from "../utils/error.js";
 import bcrypt from "bcrypt";
-
 
 export const test = (req, res) => {
   res.json({ message: "api route is working" });
@@ -40,39 +39,37 @@ export const updateUser = async (req, res, next) => {
 export const deleteUser = async (req, res, next) => {
   if (req.user.id !== req.params.id)
     return next(errorHandler(401, "you can only delete your own account"));
-try {
-    await User.findByIdAndDelete(req.params.id)
-    res.status(200).json('User has been deleted')
-    res.ClearCookie('access_token')
-} catch (error) {
-    next(error)
-}
+  try {
+    await User.findByIdAndDelete(req.params.id);
+    res.status(200).json("User has been deleted");
+    res.ClearCookie("access_token");
+  } catch (error) {
+    next(error);
+  }
 };
 
-export const getUserListing = async (req,res,next)=>{
-if(req.user.id === req.parrams.id){
-
-  try {
-    const listings = await Listing.find({userRef:req.params})
-    res.status(200).json(listings)
-  } catch (error) {
-    next(error)
+export const getUserListing = async (req, res, next) => {
+  if (req.user.id === req.parrams.id) {
+    try {
+      const listings = await Listing.find({ userRef: req.params });
+      res.status(200).json(listings);
+    } catch (error) {
+      next(error);
+    }
+  } else {
+    return next(errorHandler(401, "you can only view your listing"));
   }
-}else{
-  return next(errorHandler(401,'you can only view your listing'))
-}
-}
+};
 
-export const getUser = async(req,res,next)=>{
+export const getUser = async (req, res, next) => {
   try {
-    const user = await User.findById(req.params.id)
+    const user = await User.findById(req.params.id);
 
-  if (!user) return next(errorHandler(404,'User not found'))
+    if (!user) return next(errorHandler(404, "User not found"));
 
-    const {password: pass, ...rest}=user._doc
-    res.status(200).json(rest)
+    const { password: pass, ...rest } = user._doc;
+    res.status(200).json(rest);
   } catch (error) {
-    next(error)
+    next(error);
   }
-  
-}
+};
