@@ -34,9 +34,6 @@ app.listen(port, () => {
   console.log(`server is running on port ${port}`);
 });
 
-app.get("/", (req, res) => {
-  res.send("hello world");
-});
 
 app.post("/api/auth/signup", signUp);
 app.post("/api/auth/signin", signIn);
