@@ -1,4 +1,4 @@
 export const serverUrl =
-  import.meta.env.NODE_ENV === "production"
+  process.env.NODE_ENV === "production"
     ? "https://realestate-tru1.onrender.com"
     : "http://localhost:3000";

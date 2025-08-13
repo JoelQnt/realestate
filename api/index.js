@@ -25,15 +25,16 @@ import {
   getListings,
   updateListing,
 } from "./controllers/listingController.js";
-
+import cors from "cors";
 const app = express();
+
+app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
   console.log(`server is running on port ${port}`);
 });
-
 
 app.post("/api/auth/signup", signUp);
 app.post("/api/auth/signin", signIn);
