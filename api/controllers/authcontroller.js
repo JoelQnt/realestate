@@ -1,11 +1,11 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { errorHandler } from "../utils/error.js";
-import user from "../models/userModel.js";
+import User from "../models/userModel.js";
 export const signUp = async (req, res, next) => {
   const { username, email, password } = req.body;
   const hashedPassword = bcrypt.hashSync(password, 10);
-  const newUser = new user({ username, email, password: hashedPassword });
+  const newUser = new User({ username, email, password: hashedPassword });
 
   try {
     await newUser.save();
@@ -18,7 +18,7 @@ export const signUp = async (req, res, next) => {
 export const signIn = async (req, res, next) => {
   const { email, password } = req.body;
   try {
-    const validUser = await user.findOne({ email });
+    const validUser = await User.findOne({ email });
     if (!validUser) return next(errorHandler(404, "User not found"));
     const validpassword = bcrypt.compareSync(password, validUser.password);
     if (!validpassword) return next(errorHandler(401, "Wrong credential"));
@@ -35,10 +35,10 @@ export const signIn = async (req, res, next) => {
 
 export const google = async (req, res, next) => {
   try {
-    const googleUser = await user.findOne({ email: req.body.email });
-    if (user) {
-      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
-      const { password: pass, ...rest } = user._doc;
+    const googleUser = await User.findOne({ email: req.body.email });
+    if (User) {
+      const token = jwt.sign({ id: User._id }, process.env.JWT_SECRET);
+      const { password: pass, ...rest } = User._doc;
       res
         .cookie("access_token", token, { httpOnly: true })
         .status(200)
@@ -48,7 +48,7 @@ export const google = async (req, res, next) => {
         Math.random().toString(36).slice(-8) +
         Math.random().toString(36).slice(-8);
       const hashedPassword = bcrypt.hashSync(generatedPassword, 10);
-      const newUser = new user({
+      const newUser = new User({
         username:
           req.body.name.split(" ").join("").toLowerCase() +
           Math.random().toString(36).slice(-4),
