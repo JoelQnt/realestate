@@ -36,9 +36,9 @@ export const signIn = async (req, res, next) => {
 export const google = async (req, res, next) => {
   try {
     const googleUser = await User.findOne({ email: req.body.email });
-    if (User) {
+    if (googleUser) {
       const token = jwt.sign({ id: User._id }, process.env.JWT_SECRET);
-      const { password: pass, ...rest } = User._doc;
+      const { password: pass, ...rest } = googleUser._doc;
       res
         .cookie("access_token", token, { httpOnly: true })
         .status(200)
@@ -77,3 +77,4 @@ export const signOut = async (req, res, next) => {
     next(error);
   }
 };
+ 

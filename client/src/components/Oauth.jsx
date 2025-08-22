@@ -4,12 +4,12 @@ import { useDispatch } from "react-redux";
 import { signInSuccess } from "../redux/userSlice";
 import { serverUrl } from "../contants";
 
-
 export default function Oauth() {
   const dispatch = useDispatch();
   const handleGoogleClick = async () => {
     try {
       const provider = new GoogleAuthProvider();
+      provider.setCustomParameters({ prompt: "select_account" });
       const auth = getAuth(app);
 
       const result = await signInWithPopup(auth, provider);
@@ -27,13 +27,13 @@ export default function Oauth() {
       });
       const data = await res.json();
       dispatch(signInSuccess(data));
-      Navigate('/')
+      Navigate("/");
     } catch (error) {
       console.log("could not sign in with google", error);
     }
   };
   return (
-    <button
+    <button 
       onClick={handleGoogleClick}
       type="button"
       className="bg-red-700 text-white p-3 rounded-lg uppercase hover:opacity-95"

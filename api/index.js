@@ -26,13 +26,23 @@ import {
   updateListing,
 } from "./controllers/listingController.js";
 import cors from "cors";
+import User from "./models/userModel.js";
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
+
+
+const deleteD = async () => {
+  await User.deleteMany({});
+  console.log("documents deleted");
+};
+
+
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
+  // deleteD()
   console.log(`server is running on port ${port}`);
 });
 
@@ -49,6 +59,8 @@ app.post("/api/listing/update/:id", verifyToken, updateListing);
 app.get("/api/listing/get/:id", getListing);
 app.get("/api/user/:id", verifyToken, getUser);
 app.get("/api/listing/get", getListings);
+
+
 
 app.use((err, req, res, next) => {
   const statusCode = err.statuscode || 500;
